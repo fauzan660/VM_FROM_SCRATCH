@@ -44,7 +44,19 @@ uint16_t main_mem[MAX_MEM];
 uint16_t reg[R_COUNT];
 
 int main(int argc, const char *argv[]) {
-  @{ Load Arguments } @{Setup}
+  // @{ Load Arguments } @{Setup}
+  if (argc < 2) {
+    /* show usage string */
+    print("lc3 [image-file1] ...\n");
+    return;
+  }
+
+  for (int j = 1; j < argc; ++j) {
+    if (!read_image(argv[j])) {
+      print("failed to load image: %s\n", argv[j]);
+      return;
+    }
+  }
 
   /* since exactly one condition flag should be set at any given time, set the Z
      flag */

@@ -1,5 +1,7 @@
 // INCLUDES
 #include <cstdint>
+#include <iostream>
+using namespace std;
 #define MAX_MEM (1 << 16) /* 65536 */
 
 enum {
@@ -24,8 +26,8 @@ enum {
   OP_JSR,    /* jump register */
   OP_AND,    /* bitwise and */
   OP_LDR,    /* load register */
-  OP_STR,    /* store register */
   OP_RTI,    /* unused */
+  OP_STR,    /* store register */
   OP_NOT,    /* bitwise not */
   OP_LDI,    /* load indirect */
   OP_STI,    /* store indirect */
@@ -47,14 +49,15 @@ int main(int argc, const char *argv[]) {
   // @{ Load Arguments } @{Setup}
   if (argc < 2) {
     /* show usage string */
-    print("lc3 [image-file1] ...\n");
-    return;
+    cout << "Image not provided\n" << endl;
+
+    return -1;
   }
 
   for (int j = 1; j < argc; ++j) {
     if (!read_image(argv[j])) {
-      print("failed to load image: %s\n", argv[j]);
-      return;
+      cout << "Vevn image is not laoded" << endl;
+      return -1;
     }
   }
 

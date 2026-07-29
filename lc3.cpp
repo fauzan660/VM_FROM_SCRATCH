@@ -98,8 +98,6 @@ int main(int argc, const char *argv[]) {
       // @{ AND } break;
     case OP_NOT:
       // @{ NOT } break;
-    case OP_BR:
-      // @{ BR } break;
     case OP_JMP:
       // @{ JMP } break;
     case OP_JSR:

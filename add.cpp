@@ -1,3 +1,4 @@
+#include "lc3.h"
 #include <cstdint>
 #include <iostream>
 using namespace std;

@@ -35,6 +35,8 @@ int main(int argc, const char *argv[]) {
     uint16_t op = instr >> 12;
     uint16_t r0;
     uint16_t r1;
+    uint16_t imm_flag;
+    uint16_t pc_offset;
 
     switch (op) {
     case OP_ADD:
@@ -43,7 +45,7 @@ int main(int argc, const char *argv[]) {
       /* first operand (SR1) */
       r1 = (instr >> 6) & 0x7;
       /* whether we are in immediate mode */
-      uint16_t imm_flag = (instr >> 5) & 0x1;
+      imm_flag = (instr >> 5) & 0x1;
 
       if (imm_flag) {
         uint16_t imm5 = sign_extend(instr & 0x1F, 5);
@@ -55,7 +57,19 @@ int main(int argc, const char *argv[]) {
 
       update_flags(r0);
     case OP_AND:
-      // @{ AND } break;
+      r0 = (instr >> 9) & 0x7;
+      /* first operand (SR1) */
+      r1 = (instr >> 6) & 0x7;
+      imm_flag = (instr >> 5) & 0x1;
+
+      if (imm_flag) {
+        uint16_t imm5 = sign_extend(instr & 0x1F, 5);
+        reg[r0] = reg[r1] * imm5;
+      } else {
+        uint16_t r2 = instr & 0x7;
+        reg[r0] = reg[r1] * reg[r2];
+      }
+
     case OP_NOT:
       // @{ NOT } break;
     case OP_JMP:
@@ -63,12 +77,21 @@ int main(int argc, const char *argv[]) {
     case OP_JSR:
       // @{ JSR } break;
     case OP_LD:
-      // @{ LD } break;
-    case OP_LDI:
-      /* destination register (DR) */
       r0 = (instr >> 9) & 0x7;
       /* PCoffset 9*/
-      uint16_t pc_offset = sign_extend(instr & 0x1FF, 9);
+      pc_offset = sign_extend(instr & 0x1FF, 9);
+      /* add pc_offset to the current PC, look at that memory location to get
+       * the final address */
+      reg[r0] = mem_read(reg[R_PC] + pc_offset);
+      update_flags(r0);
+
+    case OP_LDI:
+
+      /* destination register (DR) */
+
+      r0 = (instr >> 9) & 0x7;
+      /* PCoffset 9*/
+      pc_offset = sign_extend(instr & 0x1FF, 9);
       /* add pc_offset to the current PC, look at that memory location to get
        * the final address */
       reg[r0] = mem_read(mem_read(reg[R_PC] + pc_offset));

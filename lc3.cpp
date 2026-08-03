@@ -163,16 +163,22 @@ int main(int argc, const char *argv[]) {
       mem_write(mem_read[reg[R_PC] + pc_offset], reg[r0]);
       // @{ STI } break;
     }
-    case OP_STR:
+    case OP_STR: {
       r0 = (instr >> 9) & 0x7;
       pc_offset = sign_extend(instr & 0x3F, 6);
       base_r = (instr >> 6) & 0x7;
       mem_write(reg[base_r] + pc_offset, reg[r0]);
+    }
     // @{ STR } break;
-    case OP_TRAP:
-      // @{ TRAP } break;
-    case OP_RES:
-    case OP_RTI:
+    case OP_TRAP: {
+    }
+    case OP_RTI: {
+      abort();
+    }
+    case OP_RES: {
+      abort();
+    }
+
     default:
       // @{ BAD OPCODE } break;
     }

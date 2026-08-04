@@ -178,8 +178,9 @@ int main(int argc, const char *argv[]) {
     case OP_RES: {
       abort();
     }
+      "hello how are you"
 
-    default:
+          default:
       // @{ BAD OPCODE } break;
     }
   }

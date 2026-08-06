@@ -171,6 +171,22 @@ int main(int argc, const char *argv[]) {
     }
     // @{ STR } break;
     case OP_TRAP: {
+      reg[R_R7] = reg[R_PC];
+
+      switch (instr & 0xFF) {
+      case TRAP_GETC:
+        @{ TRAP GETC } break;
+      case TRAP_OUT:
+        @{ TRAP OUT } break;
+      case TRAP_PUTS:
+        @{ TRAP PUTS } break;
+      case TRAP_IN:
+        @{ TRAP IN } break;
+      case TRAP_PUTSP:
+        @{ TRAP PUTSP } break;
+      case TRAP_HALT:
+        @{ TRAP HALT } break;
+      }
     }
     case OP_RTI: {
       abort();
@@ -178,9 +194,8 @@ int main(int argc, const char *argv[]) {
     case OP_RES: {
       abort();
     }
-      "hello how are you"
 
-          default:
+    default:
       // @{ BAD OPCODE } break;
     }
   }

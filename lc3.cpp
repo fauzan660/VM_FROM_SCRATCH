@@ -175,11 +175,19 @@ int main(int argc, const char *argv[]) {
 
       switch (instr & 0xFF) {
       case TRAP_GETC:
-        @{ TRAP GETC } break;
+        reg[R_R0] = (uint16_t)getchar();
+        update_flags(R_R0);
+
       case TRAP_OUT:
-        @{ TRAP OUT } break;
+        putc((char)reg[R_R0], stdout);
+        fflush(stdout);
       case TRAP_PUTS:
-        @{ TRAP PUTS } break;
+        uint16_t *c = main_mem + reg[R_R0];
+        while (*c) {
+          putc((char)*c, stdout);
+          ++c;
+        }
+        fflush(stdout);
       case TRAP_IN:
         @{ TRAP IN } break;
       case TRAP_PUTSP:
